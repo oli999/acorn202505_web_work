@@ -1,0 +1,16 @@
+CREATE TABLE member(
+	num NUMBER PRIMARY KEY,
+	name VARCHAR2(20),
+	addr VARCHAR2(20)
+);
+
+CREATE SEQUENCE member_seq;
+
+CREATE TABLE book(
+	num NUMBER PRIMARY KEY,
+	title VARCHAR2(20),
+	author VARCHAR2(20),
+	publisher VARCHAR2(20)
+);
+
+CREATE SEQUENCE book_seq;
