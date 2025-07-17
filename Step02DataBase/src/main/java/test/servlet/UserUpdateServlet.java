@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import test.dao.UserDao;
+import test.dto.UserDto;
 /*
  *  enctype="multipart/form-data" 형식의 폼이 전송되었을때 처리할 서블릿 만들기 
  */
@@ -46,6 +48,9 @@ public class UserUpdateServlet extends HttpServlet{
 		String email=req.getParameter("email");
 		//파일데이터 (<input type="file" name="profileImage">)
 		Part filePart=req.getPart("profileImage");
+		//DB 에서 사용자 정보를 불러온다.
+		UserDto dto=UserDao.getInstance().getByUserName(userName);
+		
 		//만일 업로드된 프로필 이미지가 있다면 (수정하지 않았으면 없다)
 		if(filePart!=null && filePart.getSize() > 0) {
 			//원본 파일의 이름 얻어내기
@@ -62,7 +67,26 @@ public class UserUpdateServlet extends HttpServlet{
 			 */
 			InputStream is=filePart.getInputStream();
 			// 원하는 목적지에 copy 를 해야 한다 
-			Files.copy(is,  Paths.get(filePath));	
+			Files.copy(is,  Paths.get(filePath));
+			
+			//기존에 이미 저장된 프로필 사진이 있으면 파일 시스템에서 삭제하기 
+			if(dto.getProfileImage() != null) {
+				//삭제할 파일의 전체 경로 
+				String deleteFilePath=fileLocation+"/"+dto.getProfileImage();
+				//Files 클래스의 delete() 메소드를 이용해서 삭제하기 
+				Files.delete(Paths.get(deleteFilePath));
+			}
+			
+			//dto 에 이메일과 저장된 파일명을 담는다.
+			dto.setEmail(email);
+			dto.setProfileImage(saveFileName);
+			//dao 의 email 과 profile 을 수정하는 메소드를 이용해서 수정반영
+			UserDao.getInstance().updateEmailProfile(dto);
+		}else { //업로드된 프로필 이미지가 없으면 (이메일만 수정)
+			//dto 에 이메일만 담는다.
+			dto.setEmail(email);
+			//dao 의 email 만 수정하는 메소드를 이용해서 수정 반영
+			UserDao.getInstance().updateEmail(dto);
 		}
 		
 		//리다일렉트 응답
