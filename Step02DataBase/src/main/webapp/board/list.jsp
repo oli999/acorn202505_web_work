@@ -1,5 +1,12 @@
+<%@page import="test.dto.BoardDto"%>
+<%@page import="test.dao.BoardDao"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+	//글목록 얻어오기
+	List<BoardDto> list = BoardDao.getInstance().selectAll();
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,7 +36,17 @@
 				</tr>
 			</thead>
 			<tbody>
-				
+			<%for(BoardDto tmp:list){ %>
+				<tr>
+					<td><%=tmp.getNum() %></td> 
+					<td><%=tmp.getWriter() %></td>
+					<td>
+						<a href="view.jsp?num=<%=tmp.getNum() %>"><%=tmp.getTitle() %></a>
+					</td>
+					<td><%=tmp.getViewCount() %></td>
+					<td><%=tmp.getCreatedAt() %></td>
+				</tr>
+			<%} %>	
 			</tbody>
 		</table>
 	</div>

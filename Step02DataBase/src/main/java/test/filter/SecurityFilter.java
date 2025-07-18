@@ -25,14 +25,14 @@ public class SecurityFilter implements Filter{
 		"/index.jsp",
 		"/user/loginform.jsp","/user/login.jsp",
 		"/user/signup-form.jsp","/user/signup.jsp",
-		"/images/","/upload/","/board/list.jsp"
+		"/images/","/upload/","/board/list.jsp","/board/view.jsp"
 	);
 	
 	
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		System.out.println("filter");
+		
 		//로그인을 했는지 확인작업
 		//부모 type 을 자식 type 으로 casting 
 		HttpServletRequest req=(HttpServletRequest)request;
