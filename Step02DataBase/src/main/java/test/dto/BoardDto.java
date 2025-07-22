@@ -15,6 +15,8 @@ public class BoardDto {
 	//이전글, 다음글 처리를 위한 필드 
 	private int prevNum;
 	private int nextNum;
+	//검색 키워드를 담기 위한 필드
+	private String keyword;
 	public int getNum() {
 		return num;
 	}
@@ -81,6 +83,13 @@ public class BoardDto {
 	public void setNextNum(int nextNum) {
 		this.nextNum = nextNum;
 	}
+	public String getKeyword() {
+		return keyword;
+	}
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+	
 	
 }
 
