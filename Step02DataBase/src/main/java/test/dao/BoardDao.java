@@ -290,12 +290,16 @@ public class BoardDao {
 			conn = new DbcpBean().getConn();
 			//실행할 sql문
 			String sql = """
-				SELECT writer, title, content, viewCount, 
-					TO_CHAR(b.createdAt, 'YY"년" MM"월" DD"일" HH24:MI') AS createdAt, 
-					profileImage
-				FROM board b
-				INNER JOIN users u ON b.writer = u.userName
-				WHERE b.num=?
+				SELECT *
+				FROM	
+					(SELECT b.num, writer, title, content, viewCount, 
+						TO_CHAR(b.createdAt, 'YY"년" MM"월" DD"일" HH24:MI') AS createdAt, 
+						profileImage,
+						LAG(b.num, 1, 0) OVER (ORDER BY b.num DESC) AS prevNum,
+						LEAD(b.num, 1, 0) OVER (ORDER BY b.num DESC) AS nextNum
+					FROM board b
+					INNER JOIN users u ON b.writer = u.userName) 
+				WHERE num=?
 			""";
 			pstmt = conn.prepareStatement(sql);
 			//? 에 값 바인딩
@@ -311,6 +315,8 @@ public class BoardDao {
 				dto.setViewCount(rs.getInt("viewCount"));
 				dto.setCreatedAt(rs.getString("createdAt"));
 				dto.setProfileImage(rs.getString("profileImage"));
+				dto.setPrevNum(rs.getInt("prevNum"));
+				dto.setNextNum(rs.getInt("nextNum"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
