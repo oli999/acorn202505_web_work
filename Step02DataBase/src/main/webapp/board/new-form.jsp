@@ -50,8 +50,14 @@
 			const content = editor.getHTML();
 			//테스트로 콘솔에 출력하기
 			console.log(content);
+			//에디터로 작성된 문자열을 폼 전송이 될수 있도록 textarea 의 value 로 넣어준다.
+			document.querySelector("#hiddenContent").value=content;
+			
 			//테스트 하기 위해 폼 전송 막기
-			e.preventDefault();
+			//e.preventDefault();
+			
+			//폼전송을 막지 않으면 전송이 된다.
+			
 		});
 	</script>
 </body>

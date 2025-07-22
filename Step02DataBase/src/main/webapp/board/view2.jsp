@@ -19,7 +19,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>/board/view.jsp</title>
+<title>/board/view2.jsp</title>
 <jsp:include page="/WEB-INF/include/resource.jsp"></jsp:include>
 </head>
 <body>
@@ -81,12 +81,17 @@
 				<td><%=dto.getCreatedAt() %></td>
 			</tr>
 		</table>
+		<%--
+			클라이언트가 작성한 글 제목이나 내용을 그대로 클라이언트에게 출력하는것은 javascript 주입 공격을 받을수 있다
+			따라서 해당 문자열은 escape 해서 출력하는것이 안전하다 
+		 --%>	
+		<div><pre><%=StringEscapeUtils.escapeHtml4(dto.getContent()) %></pre></div>
 		<div class="card mt-4">
 		  <div class="card-header bg-light">
 		    <strong>본문 내용</strong>
 		  </div>
 		  <div class="card-body p-1">
-		    <%=dto.getContent() %>
+		    <pre class="mb-0" style="background-color: #f8f9fa; border-radius: 5px; padding: 1rem; white-space: pre-wrap; font-family: '맑은 고딕', 'Consolas', monospace;"><%=StringEscapeUtils.escapeHtml4(dto.getContent()) %></pre>
 		  </div>
 		</div>
 		<%if(dto.getWriter().equals(userName)){ %>

@@ -14,6 +14,12 @@
 <meta charset="UTF-8">
 <title>/board/edit.jsp</title>
 <jsp:include page="/WEB-INF/include/resource.jsp"></jsp:include>
+<!-- Toast UI Editor CSS -->
+<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+<!-- Toast UI Editor JS -->
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<!-- 한국어 번역 파일 추가 -->
+<script src="https://uicdn.toast.com/editor/latest/i18n/ko-kr.js"></script>
 </head>
 <body>
 	<div class="container pt-3">
@@ -29,7 +35,7 @@
 		  </ol>
 		</nav>
 		<h1>글 수정 페이지</h1>
-		<form action="update.jsp" method="post">
+		<form action="update.jsp" method="post" id="editForm">
 			<div>
 				<label class="form-label" for="num">글번호</label>
 				<input class="form-control" type="text" name="num" id="num" 
@@ -46,14 +52,45 @@
 					value="<%=dto.getTitle() %>"/>
 			</div>
 			<div>
-				<label class="form-label" for="content">내용</label>
+				<label class="form-label" for="editor">내용</label>
+				
+				<div id="editor"></div>
+				
 				<textarea class="form-control" name="content" 
-					id="content" rows="10"><%=dto.getContent() %></textarea>
+					id="hiddenContent"></textarea>
 			</div>
 			<button class="btn btn-success btn-sm">수정확인</button>
 			<button class="btn btn-danger btn-sm">Reset</button>
 		</form>
 	</div>
+	<script>
+		// 위에 toast ui javascript 가 로딩 되어 있으면 toastui.Editor 클래스를 사용할수 있다
+		// 해당 클래스를 이용해서 객체 생성하면서 {} object 로 ui 에 관련된 옵션을 잘 전달하면
+		// 우리가 원하는 모양의 텍스트 편집기를 만들수 있다
+		const editor = new toastui.Editor({
+			el: document.querySelector('#editor'),
+		    height: '500px',
+		    initialEditType: 'wysiwyg',
+		    previewStyle: 'vertical',
+		    language: 'ko',
+		    initialValue: `<%=dto.getContent() %>`
+		});
+		
+		document.querySelector("#editForm").addEventListener("submit", (e)=>{
+			//에디터로 작성된 문자열 읽어오기
+			const content = editor.getHTML();
+			//테스트로 콘솔에 출력하기
+			console.log(content);
+			//에디터로 작성된 문자열을 폼 전송이 될수 있도록 textarea 의 value 로 넣어준다.
+			document.querySelector("#hiddenContent").value=content;
+			
+			//테스트 하기 위해 폼 전송 막기
+			//e.preventDefault();
+			
+			//폼전송을 막지 않으면 전송이 된다.
+			
+		});	
+	</script>
 </body>
 </html>
 
