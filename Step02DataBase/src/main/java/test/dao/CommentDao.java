@@ -33,7 +33,7 @@ public class CommentDao {
 			//실행할 sql문
 			String sql = """
 				SELECT comments.num, writer, targetWriter, content, deleted, groupNum, 
-						createdAt, profileImage
+						comments.createdAt, profileImage
 				FROM comments
 				INNER JOIN users ON comments.writer = users.userName
 				WHERE parentNum=?
