@@ -23,6 +23,7 @@ public class BoardDao {
 	public static BoardDao getInstance() {
 		return dao;
 	}
+	
 	//특정 글의 조회수를 증가 시키는 메소드
 	public boolean addViewCount(int num) {
 		Connection conn = null;
