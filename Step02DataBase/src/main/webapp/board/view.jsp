@@ -125,11 +125,15 @@
 		<!-- 댓글 목록을 출력하기 -->
 		<div class="comments">
 		<%for(CommentDto tmp:commentList){ %>
-		    <div class="card mb-3">
+		    <!-- 대댓글은 자신의 글번호와 댓글의 그룹번호가 다르다. 그런경우 왼쪽 마진을 부여한다 -->
+		    <div class="card mb-3 <%=tmp.getNum() == tmp.getGroupNum() ? "":"ms-5"%>">
 		    	<%if(tmp.getDeleted().equals("yes")){ %>
 		    		<div class="card-body bg-light text-muted rounded">삭제된 댓글 입니다</div>
 		    	<%}else{ %>
 		            <div class="card-body d-flex flex-column flex-sm-row position-relative">
+		            	<%if(tmp.getNum() != tmp.getGroupNum()){ %>
+		            		<i class="bi bi-arrow-return-right position-absolute" style="top:0;left:-30px"></i>
+		            	<%} %>		            	
 		            	<%-- 댓글 작성자가 로그인된 userName 과 같을때만 삭제 버튼출력 --%>
 		            	<%if(tmp.getWriter().equals(userName)){ %>
 		            		<button data-num="<%=tmp.getNum() %>" class="btn-close position-absolute top-0 end-0 m-1"></button>
@@ -172,8 +176,12 @@
 		                    	<button class="btn btn-sm btn-outline-primary show-reply-btn">댓글</button>  
 			                    <!-- 댓글 입력 폼 (처음에는 숨김) -->
 			                    <div class="d-none form-div">
-			                        <form action="comment-save.jsp" method="post">
-			                            <textarea class="form-control mb-2" rows="2" 
+			                        <form action="save-comment.jsp" method="post">
+			                        	<!-- 원글의 글번호, 댓글 대상자의 userName, 댓글의 그룹번호도 같이 전송해야한다 -->
+			                            <input type="hidden" name="parentNum" value="<%=dto.getNum() %>" />
+			                            <input type="hidden" name="targetWriter" value="<%=tmp.getWriter() %>"/>
+			                            <input type="hidden" name="groupNum" value="<%=tmp.getGroupNum() %>"/>
+			                            <textarea name="content" class="form-control mb-2" rows="2" 
 			                                placeholder="댓글을 입력하세요..."></textarea>
 			                            <button type="submit" class="btn btn-sm btn-success">등록</button>
 			                            <button type="reset" class="btn btn-sm btn-secondary cancel-reply-btn">취소</button>
