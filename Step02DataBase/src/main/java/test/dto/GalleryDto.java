@@ -13,6 +13,16 @@ public class GalleryDto {
     //사진이 여러개 이니까 List<GalleryImageDto> type 의 필드가 필요하다
     private List<GalleryImageDto> imageList;
     
+    //프로필 이미지를 출력하기 위한 필드
+    private String profileImage;
+    
+    public void setProfileImage(String profileImage) {
+		this.profileImage = profileImage;
+	}
+    public String getProfileImage() {
+		return profileImage;
+	}
+    
 	public int getNum() {
 		return num;
 	}

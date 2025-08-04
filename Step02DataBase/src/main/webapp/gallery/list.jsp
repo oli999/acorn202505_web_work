@@ -12,6 +12,8 @@
 <meta charset="UTF-8">
 <title>/gallery/list.jsp</title>
 <jsp:include page="/WEB-INF/include/resource.jsp"></jsp:include>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/include/navbar.jsp">
@@ -24,14 +26,14 @@
 	       <span class="visually-hidden">겔러리 새글 작성</span>
 	    </a>
 		<h1>Gallery 목록</h1>
-		<div class="row">
+		<div class="row" id="masonry-grid">
 			<%for(GalleryDto tmp:list){
 				// 0번째 대표 이미지의 저장된 파일명 
 				String name=tmp.getImageList().get(0).getSaveFileName();
 				// 전체 이미지의 갯수
 				int count=tmp.getImageList().size();
 			%>
-				<div class="col-sm-6 col-md-4 mb-4">
+				<div class="col-sm-6 col-md-4 col-lg-3 mb-4">
 					<div class="card">
 						<img class="card-img-top" src="${pageContext.request.contextPath }/upload/<%=name %>" />
 						<div class="card-body">
@@ -45,6 +47,14 @@
 			<%} %>
 		</div>
 	</div>
+	<script>
+		// masonry 레이아웃을 초기화 하는 javascript
+		const grid = document.querySelector("#masonry-grid");
+		imagesLoaded(grid, ()=>{
+			new Masonry(grid, { percentPosition:true});
+		});
+
+	</script>
 </body>
 </html>
 
