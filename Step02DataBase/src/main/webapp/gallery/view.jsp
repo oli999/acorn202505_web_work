@@ -45,6 +45,7 @@
 			<!-- 본문 -->
 			<div class="card-body">
 				<h5 class="card-title"><%=dto.getTitle()%></h5>
+				<%-- textarea 로 입력한 글에서 개행기호는 br 요소로 변경해서 출력하기 --%>
 				<p class="card-text"><%=dto.getContent().replaceAll("\n", "<br>")%></p>
 				<div class="row">
 					<%for (GalleryImageDto tmp: images) {%>
