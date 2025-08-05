@@ -28,6 +28,12 @@
 <meta charset="UTF-8">
 <title>/board/view.jsp</title>
 <jsp:include page="/WEB-INF/include/resource.jsp"></jsp:include>
+<style>
+	/* 대댓글이 처음에는 보이지 않도록 하기 위해  */
+	.re-re{
+		display:none;
+	}
+</style>
 </head>
 <body>
 	<div class="container pt-3">
@@ -126,11 +132,19 @@
 		<div class="comments">
 		<%for(CommentDto tmp:commentList){ %>
 		    <!-- 대댓글은 자신의 글번호와 댓글의 그룹번호가 다르다. 그런경우 왼쪽 마진을 부여한다 -->
-		    <div class="card mb-3 <%=tmp.getNum() == tmp.getGroupNum() ? "":"ms-5"%>">
+		    <div class="card mb-3 <%=tmp.getNum() == tmp.getGroupNum() ? "":"ms-5 re-re"%>">
 		    	<%if(tmp.getDeleted().equals("yes")){ %>
 		    		<div class="card-body bg-light text-muted rounded">삭제된 댓글 입니다</div>
 		    	<%}else{ %>
 		            <div class="card-body d-flex flex-column flex-sm-row position-relative">
+		            	<%if(tmp.getReplyCount() != 0 && tmp.getNum() == tmp.getGroupNum()){ %>
+		            		<button class="dropdown-btn btn btn-outline-secondary btn-sm position-absolute"
+		            			style="bottom:16px; right:16px;">
+		            			<i class="bi bi-caret-down"></i>
+		            			답글 <%=tmp.getReplyCount() %> 개
+		            		</button>
+		            	<%} %>		            	
+		            	
 		            	<%if(tmp.getNum() != tmp.getGroupNum()){ %>
 		            		<i class="bi bi-arrow-return-right position-absolute" style="top:0;left:-30px"></i>
 		            	<%} %>		            	
@@ -199,6 +213,35 @@
     <script>
     	//클라이언트가 로그인 했는지 여부
     	const isLogin = <%=isLogin %>;
+    	
+    	//대댓글 보기 버튼을 눌렀을때 실행할 함수 등록 
+    	document.querySelectorAll(".dropdown-btn").forEach(item => {
+     		  item.addEventListener("click", (e) => {
+     				//click 이벤트가 발생한 그 버튼의 자손요소 중에서 caret up 또는 caret down 요소를 찾는다
+	    			const caret = item.querySelector(".bi-caret-up, .bi-caret-down");
+     				// caret 모양을 위 아래로 토글 시킨다 	
+	    			caret.classList.toggle("bi-caret-down");
+	    			caret.classList.toggle("bi-caret-up");
+	    			
+	    		    // 1. 버튼(item)의 두 단계 부모 요소로 이동
+	    		    const grandParent = item.parentElement.parentElement;
+					// 2. 두단계 부모요소의 바로 다음 형제 요소의 참조값을 얻어낸다 
+	    		 	let next = grandParent.nextElementSibling;
+					// 3. 반복문 돌면서 (다음 형제 요소가 있는 동안에 반복문 돌기)
+		  	   		while (next) {
+		  	   			//만일 re-re 클래스가 존재한다면 
+		  	   			if (next.classList.contains("re-re")) {
+		  	   				// d-block 클래스를 토글시켜서 보였다 숨겼다를 반복 시킨다
+			   		    	next.classList.toggle("d-block");
+			   		  	}else{//존재하지 않으면 
+			   		  		//반복문 탈출 
+			   		  		break;
+			   		  	}
+		  	   			//다음 형제 요소의 참조값 얻어내기  
+			   		  	next = next.nextElementSibling;
+		  	   		}
+     		  });
+      	});    	
     	
         //삭제 버튼을 눌렀을때
         document.querySelectorAll(".btn-close").forEach(item => {
