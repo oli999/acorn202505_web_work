@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" %>
 <%
 	//GET 방식 파라미터 url 이라는 이름으로 전달되는 값이 있는지 읽어와 본다
 	String url=request.getParameter("url");
