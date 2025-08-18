@@ -40,7 +40,7 @@ public class MemberDaoImpl implements MemberDao{
 
 	@Override
 	public int deleteByNum(int num) {
-		
+		// delete 를 실행하고 update 된 row 의 갯수를 바로 리턴하기
 		return session.delete("member.delete", num);
 	}
 	/*

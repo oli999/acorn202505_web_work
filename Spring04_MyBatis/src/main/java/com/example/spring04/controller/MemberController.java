@@ -9,24 +9,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.spring04.dto.MemberDto;
-import com.example.spring04.repository.MemberDao;
+import com.example.spring04.service.MemberService;
 
 @Controller
 public class MemberController {
 	//필요한 의존 객체를 주입 받는다 
-	@Autowired private MemberDao dao;
+	@Autowired private MemberService service;
 	
 	@PostMapping("/member/update")
 	public String update(MemberDto dto) {
 		//수정할 회원의 정보가 MemberDto 객체에 담겨서 전달된다.
-		dao.update(dto);
+		service.updateMember(dto);
 		return "member/update";
 	}
 	
 	@GetMapping("/member/edit")
 	public String edit(int num, Model model) {
 		//수정할 회원의 정보를 얻어와서 
-		MemberDto dto=dao.getByNum(num);
+		MemberDto dto=service.getMember(num);
 		//Model 객체에 담고
 		model.addAttribute("dto", dto);
 		//view page 로 forward 이동해서 응답
@@ -41,7 +41,7 @@ public class MemberController {
 		 *  해당 값을 매개 변수에 전달해 준다. 
 		 *  int 값으로 바꿀수 없는 문자열이 넘어오면 에러가 발생한다
 		 */
-		dao.deleteByNum(num);
+		service.deleteMember(num);
 		
 		return "member/delete";
 	}
@@ -55,7 +55,7 @@ public class MemberController {
 		 *  private String name  <=>  <input type="text" name="name" >
 		 *  private String addr <=>  <input type="text" name="addr" >
 		 */
-		dao.insert(dto);
+		service.addMember(dto);
 		
 		// 회원 목록보기 "/member/list" 요청을 다시 하라는 redirect 응답 하기
 		// "redirect:리다일렉트 경로" 처럼  redirect: 으로 시작하는 문자열을 리턴하면된다.
@@ -71,7 +71,7 @@ public class MemberController {
 	@GetMapping("/member/list")
 	public String list(Model model) {
 		//회원 목록 
-		List<MemberDto> list=dao.selectAll();
+		List<MemberDto> list=service.getAll();
 		//응답에 필요한 객체를 Model 객체에 담는다.
 		model.addAttribute("list", list);
 		
