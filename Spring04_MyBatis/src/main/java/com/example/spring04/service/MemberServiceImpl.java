@@ -10,12 +10,15 @@ import com.example.spring04.exception.MemberException;
 import com.example.spring04.exception.MemberException.Reason;
 import com.example.spring04.repository.MemberDao;
 
+import lombok.RequiredArgsConstructor;
+
 //서비스 클래스에 붙여줄 어노테이션
 @Service
+@RequiredArgsConstructor // lombok 이 생성자를 자동으로 만들어 주도록 한다 
 public class MemberServiceImpl implements MemberService{
-	//의존 객체
-	@Autowired 
-	private MemberDao dao;
+	//의존 객체에 final 예약어를 붙이고 클래스에 @RequiredArgsConstructor 를 
+	//붙이면 의존 객체를 전달받는 생성자가 자동으로 만들어진다.
+	private final MemberDao dao;
 	
 	@Override
 	public List<MemberDto> getAll() {

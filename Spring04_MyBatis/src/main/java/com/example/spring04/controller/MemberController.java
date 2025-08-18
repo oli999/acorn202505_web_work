@@ -11,10 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.example.spring04.dto.MemberDto;
 import com.example.spring04.service.MemberService;
 
+import lombok.RequiredArgsConstructor;
+
 @Controller
+@RequiredArgsConstructor
 public class MemberController {
 	//필요한 의존 객체를 주입 받는다 
-	@Autowired private MemberService service;
+	private final MemberService service;
 	
 	@PostMapping("/member/update")
 	public String update(MemberDto dto) {

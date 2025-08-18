@@ -12,9 +12,14 @@ import com.example.spring04.dto.MemberDto;
 @Repository
 public class MemberDaoImpl implements MemberDao{
 	// MyBatis 를 사용할때 필요한 핵심 객체 
-	@Autowired 
-	private SqlSession session;
-
+	private final SqlSession session;
+	
+	//생성자를 이용해서 의존 객체를 주입 받는것이 더 일반적이다 (lombok 의 기능을 이용하면 생략 가능하다)
+	//@Autowired //생성자가 오직 1개인 경우에는 생략 가능하다 
+	public MemberDaoImpl(SqlSession session) {
+		this.session=session;
+	}
+	
 	@Override
 	public List<MemberDto> selectAll() {
 		/*
