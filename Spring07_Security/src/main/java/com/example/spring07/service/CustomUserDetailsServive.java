@@ -20,6 +20,16 @@ import com.example.spring07.dto.UserDto;
 
 @Service //bean 으로 만들기 위한 어노테이션
 public class CustomUserDetailsServive implements UserDetailsService{
+	
+	/*
+	 *  1. 클라이언트가 로그인을 시도 하면 이 메소드를 spring security 가 호출한다
+	 *  2. 메소드를 호출하면서 클라이언트가 입력한 userName 을 전달해준다
+	 *  3. 우리는 전달된 userName 을 이용해서 DB 에서 해당 유저의 정보를 select 해야한다
+	 *  4. 만일 select 된 유저 정보가 없으면 예외를 발생시키면 되고
+	 *  5. select 된 정보가 있다면 UserDetails type 객체에 select 된 정보 ( 비밀번호, 권한등) 를 
+	 *     담아서 리턴한다.
+	 *  6. 이 메소드에서 리턴한 UserDetails 객체를 이용해서 spring security 가 로그인 처리를 대신해 준다.
+	 */
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

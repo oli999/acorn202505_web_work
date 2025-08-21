@@ -47,7 +47,9 @@ public class SecurityConfig {
 				//로그인 폼의 비밀번호 입력란의 name 속성의 값 <input type="password" name="password" >
 				.passwordParameter("password")
 				//로그인 성공시 forward 이동될 url ( login welcome 응답 ) 
-				.successForwardUrl("/user/login-success")
+				//.successForwardUrl("/user/login-success")
+				//로그인 성공시 동작하는 핸들러 객체 등록하기
+				.successHandler(new AuthSuccessHandler())
 				//계정, 비밀번호 문제로 로그인 실패시 forward 이동될 url ( 실패 되었다고 응답 )
 				.failureForwardUrl("/user/login-fail")
 				.permitAll() //위의 요청들은 whiteList 에 없어도 요청 가능하도록 설정 
