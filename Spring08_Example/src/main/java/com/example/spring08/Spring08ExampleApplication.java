@@ -1,0 +1,13 @@
+package com.example.spring08;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class Spring08ExampleApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(Spring08ExampleApplication.class, args);
+	}
+
+}
