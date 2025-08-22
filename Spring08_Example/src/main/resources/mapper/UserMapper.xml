@@ -17,7 +17,7 @@
 
 	<update id="updatePassword" parameterType="com.example.spring08.dto.UserDto">
 		UPDATE users
-		SET password=#{newPassword}
+		SET password=#{password}
 		WHERE userName=#{userName}
 	</update>
 

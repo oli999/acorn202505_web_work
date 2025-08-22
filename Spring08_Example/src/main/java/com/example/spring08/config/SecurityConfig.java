@@ -26,7 +26,8 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
 		// security 를 통과하는 white list
 		String[] whiteList = {"/", "/user/loginform", "/user/login-fail", 
-				"/user/expired", "/user/signup-form", "/user/signup"};
+				"/user/expired", "/user/signup-form", "/user/signup", 
+				"/test/**", "/user/check-id"};
 		
 		httpSecurity
 		.csrf(csrf->csrf.disable()) //csrf 검증 사용하지 않기 
