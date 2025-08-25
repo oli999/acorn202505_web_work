@@ -26,6 +26,25 @@ public class UserController {
 	
 	private final UserService service;
 	
+	@PostMapping("/user/update")
+	public String update(UserDto dto) {
+		//서비스를 이용해서 개인 정보를 수정하고
+		service.updateUser(dto);
+		//개인 정보 자세히 보기로 리디일렉트 이동한다.
+		return "redirect:/user/info";
+	}
+	
+	@GetMapping("/user/edit")
+	public String userEdit(Model model) {
+		//로그인된 userName
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		UserDto dto = service.getUser(userName);
+		//응답에 필요한 정보를 Model 객체에 담기
+		model.addAttribute("dto", dto);
+		//타임리프 view page 에서 회원정보 수정 폼을 응답 
+		return "user/edit";
+	}
+	
 	//사용가능한 아이디 인지 여부를 json 문자열로 리턴하는 메소드
 	@GetMapping("/user/check-id")
 	@ResponseBody

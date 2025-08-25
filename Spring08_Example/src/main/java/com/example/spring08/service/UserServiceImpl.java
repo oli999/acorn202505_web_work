@@ -1,11 +1,15 @@
 package com.example.spring08.service;
 
+import java.io.File;
 import java.util.Map;
+import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.spring08.dto.PwdChangeRequest;
 import com.example.spring08.dto.UserDto;
@@ -21,6 +25,9 @@ public class UserServiceImpl implements UserService{
 	private final UserDao dao;
 	//비밀번호를 암호화 하기 위한 객체도 spring bean container 로 부터 주입 받는다.
 	private final PasswordEncoder encoder;
+	//업로드된 이미지를 저장할 위치 얻어내기 
+	@Value("${file.location}") 
+	private String fileLocation;
 	
 	//사용자를 추가하는 메소드 
 	@Override
@@ -65,6 +72,32 @@ public class UserServiceImpl implements UserService{
 		boolean canUse = dto == null ? true : false;
 		//Map 에 담아서 리턴한다
 		return Map.of("canUse", canUse);
+	}
+
+	@Override
+	public void updateUser(UserDto dto) {
+		//업로드된 이미지가 있는지 읽어와 본다
+		MultipartFile image=dto.getProfileFile();
+		//만일 업로드된 이미지가 있다면
+		if(!image.isEmpty()) {
+			//원본 파일명 
+			String orgFileName = image.getOriginalFilename();
+			//이미지의 확장자를 유지하기 위해 뒤에 원본 파일명을 추가한다 
+			String saveFileName=UUID.randomUUID().toString()+orgFileName;
+			//저장할 파일의 전체 경로 구성하기
+			String filePath=fileLocation + File.separator + saveFileName;
+			try {
+				//업로드된 파일을 저장할 파일 객체 생성
+				File saveFile=new File(filePath);
+				image.transferTo(saveFile);
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			//UserDto 에 저장된 이미지의 이름을 넣어준다.
+			dto.setProfileImage(saveFileName);
+		}
+		//UserDao 객체를 이용해서 수정 반영하기 ( dto 의 profileImage 는 null 일수도 있다)
+		dao.update(dto);
 	}
 
 	

@@ -1,5 +1,7 @@
 package com.example.spring08.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +20,15 @@ public class UserDto {
 	private String profileImage;
 	private String createdAt;
 	private String updatedAt;
+	// <input type="file" name="profileFile" > 을 처리하기 위한 필드
+	private MultipartFile profileFile;
 }
+
+
+
+
+
+
 
 
 

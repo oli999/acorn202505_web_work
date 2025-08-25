@@ -10,4 +10,5 @@ public interface UserService {
 	public UserDto getUser(String userName);
 	public void updatePassword(PwdChangeRequest pcr);
 	public Map<String, Object> canUseId(String id);
+	public void updateUser(UserDto dto);
 }
