@@ -27,7 +27,7 @@ public class SecurityConfig {
 		// security 를 통과하는 white list
 		String[] whiteList = {"/", "/user/loginform", "/user/login-fail", 
 				"/user/expired", "/user/signup-form", "/user/signup", 
-				"/test/**", "/user/check-id"};
+				"/test/**", "/user/check-id", "/board/list", "/board/view", "/upload/**"};
 		
 		httpSecurity
 		.csrf(csrf->csrf.disable()) //csrf 검증 사용하지 않기 
