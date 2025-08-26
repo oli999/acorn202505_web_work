@@ -22,6 +22,34 @@ public class CommentDaoImpl implements CommentDao{
 		return session.selectList("comment.selectList", parentNum);
 	}
 
+	@Override
+	public int delete(int num) {
+		
+		return session.update("comment.delete", num);
+	}
+
+	@Override
+	public int update(CommentDto dto) {
+		
+		return session.update("comment.update", dto);
+	}
+
+	@Override
+	public void insert(CommentDto dto) {
+		session.insert("comment.insert", dto);
+	}
+
+	@Override
+	public int getSequence() {
+		return session.selectOne("comment.getSequence");
+	}
+
+	@Override
+	public CommentDto getByNum(int num) {
+		
+		return session.selectOne("comment.getByNum", num);
+	}
+
 }
 
 

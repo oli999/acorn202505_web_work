@@ -23,6 +23,30 @@ public class BoardController {
 	
 	private final BoardService service;
 	
+	@PostMapping("/board/comment-update")
+	public String commentUpdate(CommentDto dto) {
+		
+		service.updateComment(dto);
+		
+		return "redirect:/board/view?num="+dto.getParentNum();
+	}
+	
+	@GetMapping("/board/comment-delete")
+	public String boardDelete(CommentDto dto) {
+		//dto 에는 삭제할 댓글의 글번호와 원글의 글번호가 들어 있다.
+		service.deleteComment(dto.getNum());
+		
+		return "redirect:/board/view?num="+dto.getParentNum();
+	}
+	
+	@PostMapping("/board/save-comment")
+	public String boardSave(CommentDto dto) {
+		//서비스를 이용해서 새로운 댓글을 저장한다 
+		service.createComment(dto);
+		//댓글을 작성한 원글 자세히 보기로 다시 리다일렉트 이동시키기
+		return "redirect:/board/view?num="+dto.getParentNum();
+	}
+	
 	@GetMapping("/board/view")
 	public String boardView(int num, Model model) {
 		//서비스를 이용해서 응답에 필요한 데이터를 얻어내서 

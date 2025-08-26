@@ -11,4 +11,17 @@ public interface BoardService {
 	public void createContent(BoardDto dto);
 	public BoardDto getDetail(int num);
 	public List<CommentDto> getComments(int parentNum);
+	public void createComment(CommentDto dto); //댓글 저장 
+	public void updateComment(CommentDto dto); //댓글 수정
+	public void deleteComment(int num); //댓글 삭제
 }
+
+
+
+
+
+
+
+
+
+
