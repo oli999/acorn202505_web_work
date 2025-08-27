@@ -28,24 +28,9 @@ public class BoardDaoImpl implements BoardDao{
 	}
 
 	@Override
-	public List<BoardDto> selectPageByKeyword(BoardDto dto) {
-		
-		return session.selectList("board.selectPageByKeyword", dto);
-	}
-
-	@Override
-	public int getCount() {
+	public int getCount(BoardDto dto) {
 		// resultType : int 
-		return session.selectOne("board.getCount");
-	}
-
-	@Override
-	public int getCountByKeyword(String keyword) {
-		/*
-		 *  parameterType: string
-		 *  resultType: int
-		 */
-		return session.selectOne("board.getCountByKeyword", keyword);
+		return session.selectOne("board.getCount", dto);
 	}
 
 	@Override
@@ -59,6 +44,12 @@ public class BoardDaoImpl implements BoardDao{
 	public BoardDto getByNum(int num) {
 		
 		return session.selectOne("board.getByNum", num);
+	}
+
+	@Override
+	public BoardDto getByDto(BoardDto dto) {
+		
+		return session.selectOne("board.getByDto", dto);
 	}
 
 }

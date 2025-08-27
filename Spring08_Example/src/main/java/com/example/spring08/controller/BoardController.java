@@ -48,10 +48,25 @@ public class BoardController {
 	}
 	
 	@GetMapping("/board/view")
-	public String boardView(int num, Model model) {
+	public String boardView(BoardDto requestDto, Model model) {
+		/*
+		 *  requestDto 에는 자세히 보여줄 글의 num 와
+		 *  search (검색조건), keyword (검색어) 가 들어 있을수도 있다.
+		 *  검색어가 없는경우는 search 와 keyword 에는 null 이 들어 있다.
+		 */
+		
 		//서비스를 이용해서 응답에 필요한 데이터를 얻어내서 
-		BoardDto dto=service.getDetail(num);
-		List<CommentDto> comments=service.getComments(num);
+		BoardDto dto=service.getDetail(requestDto);
+		
+		String query="";
+		if(requestDto.getKeyword() != null) {
+			query="&search="+requestDto.getSearch()+"&keyword="+requestDto.getKeyword();
+		}
+		//검색 query 정보도 view page 에 전달한다 
+		model.addAttribute("query", query);
+		
+		//댓글 목록은 원글의 글번호를 전달해서 얻어낸다. 
+		List<CommentDto> comments=service.getComments(requestDto.getNum());
 		//모델 객체에 담고 
 		model.addAttribute("dto", dto);
 		model.addAttribute("commentList", comments);
@@ -93,9 +108,11 @@ public class BoardController {
 	@GetMapping("/board/list")
 	public String list(Model model,
 			@RequestParam(defaultValue = "1") int pageNum, 
-			@RequestParam(defaultValue = "") String keyword) {
+			BoardDto dto) { 
+		//BoardDto 객체에는 keyword 와 search 가 있을수도 있다. (없을수도 있다 null)
+		
 		//응답에 필요한 데이터를 얻어내서 
-		BoardListResponse listResponse = service.getBoardList(pageNum, keyword);
+		BoardListResponse listResponse = service.getBoardList(pageNum, dto);
 		//모델 객체에 담고 
 		model.addAttribute("dto", listResponse);
 		

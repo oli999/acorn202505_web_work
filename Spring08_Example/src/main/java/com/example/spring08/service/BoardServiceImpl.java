@@ -25,7 +25,7 @@ public class BoardServiceImpl implements BoardService{
 	// pageNum 또는 keyword 에 해당하는 글목록과 추가 정보를 BoardListResponse 객체에 담아서 
 	// 리턴하는 메소드 
 	@Override
-	public BoardListResponse getBoardList(int pageNum, String keyword) {
+	public BoardListResponse getBoardList(int pageNum, BoardDto dto) {
 		
 		//한 페이지에 몇개씩 표시할 것인지
 		final int PAGE_ROW_COUNT=3;
@@ -43,23 +43,8 @@ public class BoardServiceImpl implements BoardService{
 		//하단 끝 페이지 번호
 		int endPageNum=startPageNum+PAGE_DISPLAY_COUNT-1;
 		
-		/*
-			StringUtils 클래스의 isEmpty() static 메소드를 이용하면 문자열이 비었는지 여부를 알수 있다
-			null 또는 "" 빈문자열은  비었다고 판정된다.
-			
-			StringUtils.isEmpty(keyword)
-			는
-			keyword == null or "".equals(keyword) 
-			를 대체할수 있다.
-		*/
-		//전체 글의 갯수 
-		int totalRow=0;
-		//만일 전달된 keyword 가 없다면 
-		if(StringUtils.isEmpty(keyword)){
-			totalRow=boardDao.getCount();
-		}else{ //있다면 
-			totalRow=boardDao.getCountByKeyword(keyword);
-		}
+		//전체글의 갯수
+		int totalRow = boardDao.getCount(dto);
 		
 		//전체 페이지의 갯수 구하기
 		int totalPageCount=(int)Math.ceil(totalRow/(double)PAGE_ROW_COUNT);
@@ -67,28 +52,30 @@ public class BoardServiceImpl implements BoardService{
 		if(endPageNum > totalPageCount){
 			endPageNum=totalPageCount; //보정해 준다. 
 		}	
-		
-		//dto 에 select 할 row 의 정보를 담고 
-		BoardDto dto=new BoardDto();
+		// startRowNum 과 endRowNum 을 BoardDto 객체에 담아서
 		dto.setStartRowNum(startRowNum);
 		dto.setEndRowNum(endRowNum);
-		//글목록 
-		List<BoardDto> list=null;
-		//만일 keyword 가 없아면 
-		if(StringUtils.isEmpty(keyword)){
-			list = boardDao.selectPage(dto);
-		}else{//있다면
-			// dto 에 keyword 를 담고 
-			dto.setKeyword(keyword);
-			// 키워드에 해당하는 글 목록을 얻어낸다 
-			list = boardDao.selectPageByKeyword(dto);
+		
+		//글 목록 얻어오기 (검색 키워드가 있다면 조건에 맞는 목록만 얻어낸다)
+		List<BoardDto> list=boardDao.selectPage(dto);
+		
+		//query 문자열을 미리 구성해서 view page 에 전달하도록 한다 
+		/*
+		 * 검색 키워드가 없으면  query=""  빈문자열
+		 * 검색 키워드가 있으면  query="&search=검색조건&keyword=검색어"  형식의 문자열 
+		 */
+		String query="";
+		if(dto.getKeyword() != null) {
+			query="&search="+dto.getSearch()+"&keyword="+dto.getKeyword();
 		}
 		
 		//한줄 coding 으로 BoardListResponse 객체를 만들어서 리턴하기
 		return BoardListResponse.builder()
 				.list(list)
 				.pageNum(pageNum)
-				.keyword(keyword)
+				.keyword(dto.getKeyword())
+				.search(dto.getSearch())
+				.query(query)
 				.startPageNum(startPageNum)
 				.endPageNum(endPageNum)
 				.totalPageCount(totalPageCount)
@@ -103,9 +90,9 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public BoardDto getDetail(int num) {
+	public BoardDto getDetail(BoardDto dto) {
 		
-		return boardDao.getByNum(num);
+		return boardDao.getByDto(dto);
 	}
 
 	@Override

@@ -20,7 +20,9 @@ public class BoardListResponse {
 	private int totalPageCount;
 	private int pageNum;
 	private int totalRow;	
-	private String keyword;	
+	private String keyword;	//검색 키워드
+	private String search; //검색 조건
+	private String query; //GET 방식 파라미터 "search=xxx&keyword=xxx" or "" 
 }
 
 

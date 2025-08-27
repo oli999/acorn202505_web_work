@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <title>/board/list.html</title>
-<th:block th:insert="/include/resource :: bootstrap"></th:block>
+<th:block th:insert="~{/include/resource :: bootstrap}"></th:block>
 </head>
 <body>
 
-	<th:block th:insert="/include/navbar :: nav('board')"></th:block>
+	<th:block th:insert="~{/include/navbar :: nav('board')}"></th:block>
 	
 	<div class="container pt-1">
 		<a class="btn btn-outline-primary btn-sm" th:href="@{/board/new-form}">
@@ -18,15 +18,33 @@
 		<!-- 행을 만들고  -->
 		<div class="row my-3">
 			<!-- 4/12 인 칼럼을 만들고 margin-start:auto 를 부여해서 왼쪽 마진을 자동 부여한다 -->
-			<div class="col-lg-4 col-md-6 ms-auto">
+			<div class="col-md-6 ms-auto">
 				<form th:action="@{/board/list}" method="get">
 					<div class="input-group">
+						
+						<select name="search" class="form-select">
+							<option th:selected="${dto.search eq 'title_content'}" value="title_content">제목+내용</option>
+							<option th:selected="${dto.search eq 'title'}" value="title">제목</option>
+							<option th:selected="${dto.search eq 'writer'}" value="writer">작성자</option>
+						</select>
+					
 						<input th:value="${#strings.isEmpty(dto.keyword) ? '' : dto.keyword}" type="text" name="keyword" class="form-control" placeholder="검색어 입력..."/>
-						<button type="submit" class="btn btn-outline-secondary">검색</button>
+						<button type="submit" class="btn btn-outline-secondary">
+							<i class="bi bi-search"></i>
+							<span class="visually-hidden">검색</span>
+						</button>
+						<a class="btn btn-outline-danger" th:href="@{/board/list}">
+							<i class="bi bi-arrow-clockwise"></i>
+							<span class="visually-hidden">새로고침</span>
+						</a>
 					</div>
 				</form>
 			</div>
 		</div>
+		<p th:if="${dto.keyword ne null}">
+			<strong th:text="${dto.keyword}"></strong> 에 대한 검색결과 
+			<strong th:text="${dto.totalRow}"></strong> 개 
+		</p>
 		<table class="table table-bordered">
 			<thead>
 				<tr>
@@ -43,7 +61,7 @@
 					<td>[[${tmp.num}]]</td> 
 					<td>[[${tmp.writer}]]</td>
 					<td>
-						<a th:href="@{/board/view(num=${tmp.num})}">[[${tmp.title}]]</a>
+						<a th:href="@{|/board/view?num=${tmp.num}${dto.query}|}">[[${tmp.title}]]</a>
 					</td>
 					<td th:text="${tmp.viewCount}"></td>
 					<td th:text="${tmp.createdAt}"></td>
@@ -53,22 +71,26 @@
 		</table>
 		
 		<ul class="pagination">
-			
+			<!--/* 
+				@{'/board/list?pageNum=' + ${dto.startPageNum-1} + ${dto.query}}
+				위와 같이 작성하거나 혹은 문자열을 이어 붙일때는 아래와 같이하면 좀더 간편하다
+				@{|/board/list?pageNum=${dto.startPageNum-1}${dto.query}|}
+			*/-->
 			<li th:if="${dto.startPageNum ne 1}" class="page-item">
 				<a class="page-link" 
-					th:href="@{/board/list(num=${dto.startPageNum-1},keyword=${dto.keyword})}">&lsaquo;</a>
+					th:href="@{|/board/list?pageNum=${dto.startPageNum-1}${dto.query}|}">&lsaquo;</a>
 			</li>
 				
 			
 			<li th:each="i : ${#numbers.sequence(dto.startPageNum, dto.endPageNum)}" class="page-item">
 				<a class="page-link" th:classappend="${i eq dto.pageNum ? 'active':null}"
-				 	th:href="@{/board/list(pageNum=${i},keyword=${dto.keyword})}">[[${i}]]</a>
+				 	th:href="@{|/board/list?pageNum=${i}${dto.query}|}">[[${i}]]</a>
 			</li>
 			
 			
 			<li th:if="${dto.endPageNum lt dto.totalPageCount}" class="page-item">
 				<a class="page-link" 
-					th:href="@{/board/list(pageNum=${dto.endPageNum+1},keyword=${dto.keyword})}">&rsaquo;</a>
+					th:href="@{|/board/list?pageNum=${dto.endPageNum+1}${dto.query}|}">&rsaquo;</a>
 			</li>
 		
 		</ul>

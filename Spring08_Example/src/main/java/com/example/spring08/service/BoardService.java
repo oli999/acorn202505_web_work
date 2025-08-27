@@ -7,9 +7,9 @@ import com.example.spring08.dto.BoardListResponse;
 import com.example.spring08.dto.CommentDto;
 
 public interface BoardService {
-	public BoardListResponse getBoardList(int pageNum, String keyword);
+	public BoardListResponse getBoardList(int pageNum, BoardDto dto);
 	public void createContent(BoardDto dto);
-	public BoardDto getDetail(int num);
+	public BoardDto getDetail(BoardDto dto);
 	public List<CommentDto> getComments(int parentNum);
 	public void createComment(CommentDto dto); //댓글 저장 
 	public void updateComment(CommentDto dto); //댓글 수정
