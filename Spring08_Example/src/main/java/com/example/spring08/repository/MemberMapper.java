@@ -29,6 +29,7 @@ public interface MemberMapper {
 	@Update("UPDATE member SET name=#{name}, addr=#{addr} WHERE num=#{num}")
 	public int update(MemberDto dto); //update 된 rowCount 가 리턴된다.
 	
+	/*
 	@Insert("""
 		INSERT INTO member 
 		(num, name, addr) 
@@ -37,7 +38,41 @@ public interface MemberMapper {
 	@SelectKey(statement = "SELECT member_seq.NEXTVAL FROM DUAL", 
 			keyProperty = "num", resultType = int.class, before = true)
 	public void insert(MemberDto dto);
+	*/
+	
+	//위의 기능은 Mapper xml 문서를 활용해서 구현하기
+	
+	/*
+	 *  어노테이션 없이 메소드만 정의하기
+	 *  
+	 *  Mapper xml 문서의 namespace="페키지명포함해서 @Mapper 클래스 정의하기"
+	 *  
+	 *  메소드명이 xml 문서 안에 들어있는 sql 의 id 가 된다. 
+	 *  
+	 *  namespace="com.example.spring08.repository.MemberMapper"
+	 *  
+	 *  <insert  id="insert" parameterType="memberDto" >
+	 */
+	public void insert(MemberDto dto);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
