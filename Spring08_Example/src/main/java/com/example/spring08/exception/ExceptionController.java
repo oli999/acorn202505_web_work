@@ -1,12 +1,25 @@
 package com.example.spring08.exception;
 
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.spring08.exception.MemberException;
+
 //예외 컨트롤러는 @ControllerAdvice 어노테이션을 붙여서 bean 으로 만든다.
 @ControllerAdvice
 public class ExceptionController {
+	
+	@ExceptionHandler(MemberException.class)
+	public String memberException(MemberException me, Model model) {
+		
+		model.addAttribute("title", "Member 관련 작업중에 에러가 발생했습니다");
+		model.addAttribute("message", me.getMessage());
+		model.addAttribute("reason", me.reason.name());
+		
+		return "error/member-exception";
+	}
 	/*
 	 *  ExceptionController 또는 다른 일반 Controller 에서 리다일렉트 이동하면서 
 	 *  일회성 데이터를 전달하고 싶을때는 컨트롤러의 매개변수에 RedirectAttributes 를 선언하고
