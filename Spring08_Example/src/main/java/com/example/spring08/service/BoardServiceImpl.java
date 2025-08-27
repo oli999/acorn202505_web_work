@@ -146,6 +146,41 @@ public class BoardServiceImpl implements BoardService{
 		commentDao.delete(num);
 	}
 
+	@Override
+	public void deleteContent(int num) {
+		//글 작성자와 로그인된 userName 이 동일한지 비교해서 동일하지 않으면 예외를 발생시킨다.
+		String writer = boardDao.getByNum(num).getWriter();
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		if(!writer.equals(userName)) {
+			throw new RuntimeException("남의 글을 지울수는 없습니다!");
+		}
+		//삭제하고 삭제된 row 의 갯수를 리턴받는다. 정상 삭제시 1 , 삭제 실패시 0 가 리턴된다.
+		int rowCount = boardDao.delete(num);
+		if(rowCount == 0) {
+			throw new RuntimeException("삭제 실패!");
+		}
+	}
+
+	@Override
+	public BoardDto getData(int num) {
+		
+		return boardDao.getByNum(num);
+	}
+
+	@Override
+	public void updateContent(BoardDto dto) {
+		//글 작성자와 로그인된 userName 이 동일한지 비교해서 동일하지 않으면 예외를 발생시킨다.
+		String writer = boardDao.getByNum(dto.getNum()).getWriter();
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		if(!writer.equals(userName)) {
+			throw new RuntimeException("남의 글을 수정할수 없습니다!");
+		}
+		int rowCount=boardDao.update(dto);
+		if(rowCount==0) {
+			throw new RuntimeException("글 수정 실패!");
+		}
+	}
+
 }
 
 

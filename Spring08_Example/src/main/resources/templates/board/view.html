@@ -25,6 +25,14 @@
 		  </ol>
 		</nav>
 		<h1>게시글 상세보기</h1>
+		<!--/* 
+			th:if="${message != null}"
+			th:if="${!#strings.isEmpty(message)}"
+			대신에 
+			th:if="${message}" 로 사용하면 편리하다 
+			만일 message 가 존재한다면 이라고 읽으면 된다.
+		*/-->
+		<p th:if="${message}" class="alert alert-success p-3">[[${message}]]</p>
 		
 		<!--/* 
 			Thymeleaf view page 에서 요청 파라미터로 전달되었던 값도 추출할수 있다.

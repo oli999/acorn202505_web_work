@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.spring08.dto.BoardDto;
 import com.example.spring08.dto.BoardListResponse;
@@ -22,6 +23,31 @@ import lombok.RequiredArgsConstructor;
 public class BoardController {
 	
 	private final BoardService service;
+	
+	//게시글 수정 반영 요청 처리
+	@PostMapping("/board/update")
+	public String boardUpdate(BoardDto dto, RedirectAttributes ra) {
+		//글수정 반영하고
+		service.updateContent(dto);
+		//리다일렉트 이동해서 출력할 메세지도 담는다.
+		ra.addFlashAttribute("message", "게시글을 성공적으로 수정했습니다");
+		//글 자세히 보기로 리다일렉트 이동
+		return "redirect:/board/view?num="+dto.getNum();
+	}
+	
+	@GetMapping("/board/edit")
+	public String boardEdit(int num, Model model) {
+		
+		model.addAttribute("dto", service.getData(num));
+		
+		return "board/edit";
+	}
+	
+	@GetMapping("/board/delete")
+	public String boardDelete(int num) {
+		service.deleteContent(num);
+		return "board/delete";
+	}
 	
 	@PostMapping("/board/comment-update")
 	public String commentUpdate(CommentDto dto) {
