@@ -16,6 +16,7 @@ import com.example.spring08.dto.BoardDto;
 import com.example.spring08.dto.BoardListResponse;
 import com.example.spring08.dto.CommentDto;
 import com.example.spring08.service.BoardService;
+import com.example.spring08.service.CommentService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class BoardController {
 	
 	private final BoardService service;
+	private final CommentService commentService;
 	
 	//게시글 수정 반영 요청 처리
 	@PostMapping("/board/update")
@@ -50,33 +52,6 @@ public class BoardController {
 		return "board/delete";
 	}
 	
-	@PostMapping("/{category}/comment-update")
-	public String commentUpdate(CommentDto dto, 
-			@PathVariable("category") String category) {
-		
-		service.updateComment(dto);
-		
-		return "redirect:/"+category+"/view?num="+dto.getParentNum();
-	}
-	
-	@GetMapping("/{category}/comment-delete")
-	public String boardDelete(CommentDto dto, 
-			@PathVariable("category") String category) {
-		//dto 에는 삭제할 댓글의 글번호와 원글의 글번호가 들어 있다.
-		service.deleteComment(dto.getNum());
-		
-		return "redirect:/"+category+"/view?num="+dto.getParentNum();
-	}
-	
-	@PostMapping("/{category}/save-comment")
-	public String boardSave(CommentDto dto, 
-			@PathVariable("category") String category) {
-		//서비스를 이용해서 새로운 댓글을 저장한다 
-		service.createComment(dto);
-		//댓글을 작성한 원글 자세히 보기로 다시 리다일렉트 이동시키기
-		return "redirect:/"+category+"/view?num="+dto.getParentNum();
-	}
-	
 	@GetMapping("/board/view")
 	public String boardView(BoardDto requestDto, Model model) {
 		/*
@@ -96,7 +71,7 @@ public class BoardController {
 		model.addAttribute("query", query);
 		
 		//댓글 목록은 원글의 글번호를 전달해서 얻어낸다. 
-		List<CommentDto> comments=service.getComments(requestDto.getNum());
+		List<CommentDto> comments=commentService.getComments(requestDto.getNum());
 		//모델 객체에 담고 
 		model.addAttribute("dto", dto);
 		model.addAttribute("commentList", comments);
