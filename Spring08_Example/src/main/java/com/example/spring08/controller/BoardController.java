@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -49,28 +50,31 @@ public class BoardController {
 		return "board/delete";
 	}
 	
-	@PostMapping("/board/comment-update")
-	public String commentUpdate(CommentDto dto) {
+	@PostMapping("/{category}/comment-update")
+	public String commentUpdate(CommentDto dto, 
+			@PathVariable("category") String category) {
 		
 		service.updateComment(dto);
 		
-		return "redirect:/board/view?num="+dto.getParentNum();
+		return "redirect:/"+category+"/view?num="+dto.getParentNum();
 	}
 	
-	@GetMapping("/board/comment-delete")
-	public String boardDelete(CommentDto dto) {
+	@GetMapping("/{category}/comment-delete")
+	public String boardDelete(CommentDto dto, 
+			@PathVariable("category") String category) {
 		//dto 에는 삭제할 댓글의 글번호와 원글의 글번호가 들어 있다.
 		service.deleteComment(dto.getNum());
 		
-		return "redirect:/board/view?num="+dto.getParentNum();
+		return "redirect:/"+category+"/view?num="+dto.getParentNum();
 	}
 	
-	@PostMapping("/board/save-comment")
-	public String boardSave(CommentDto dto) {
+	@PostMapping("/{category}/save-comment")
+	public String boardSave(CommentDto dto, 
+			@PathVariable("category") String category) {
 		//서비스를 이용해서 새로운 댓글을 저장한다 
 		service.createComment(dto);
 		//댓글을 작성한 원글 자세히 보기로 다시 리다일렉트 이동시키기
-		return "redirect:/board/view?num="+dto.getParentNum();
+		return "redirect:/"+category+"/view?num="+dto.getParentNum();
 	}
 	
 	@GetMapping("/board/view")
