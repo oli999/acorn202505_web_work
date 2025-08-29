@@ -103,10 +103,7 @@ public class GalleryServiceImpl implements GalleryService{
 
 	@Override
 	public GalleryViewResponse getGallery(int num) {
-		//로그인된 userName 을 얻어낸다 로그인을 안했으면 "anonymousUser" 이다 
-		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-		//로그인 여부 
-		boolean isLogin = userName.equals("anonymousUser") ? false : true;
+		
 		//GalleryDto 얻어내기
 		GalleryDto dto=galleryMapper.getData(num);
 		// dto 의 content 에서 개행기호를 <br> 요소로 변경한다음 다시 넣기
@@ -119,8 +116,6 @@ public class GalleryServiceImpl implements GalleryService{
 		List<CommentDto> commentList=commentDao.selectList(num);
 		
 		return GalleryViewResponse.builder()
-				.userName(userName)
-				.isLogin(isLogin)
 				.dto(dto)
 				.images(images)
 				.commentList(commentList)

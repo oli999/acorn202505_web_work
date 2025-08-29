@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 public class GalleryViewResponse {
-	private String userName;
-	private boolean isLogin;
 	private GalleryDto dto;
 	private List<GalleryImageDto> images;
 	private List<CommentDto> commentList;

@@ -73,7 +73,7 @@ public class SecurityConfig {
 		.sessionManagement(config -> 
 			config
 				//최대 세션 허용 갯수 설정 ( 다중 기기 로그인 허용 여부 )
-				.maximumSessions(1)
+				.maximumSessions(3)
 				//로그인이 해제 되었을때 응답할 url
 				.expiredUrl("/user/expired")
 		);
