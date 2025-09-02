@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>/clients/list.html</title>
+<th:block th:insert="~{/include/resource :: bootstrap}"></th:block>
+</head>
+<body>
+	<div class="container py-5">
+		<div class="d-flex justify-content-between mb-3">
+			<h3>고객 목록</h3>
+			<a class="btn btn-primary" th:href="@{/clients/new}">
+				<i class="bi bi-person-plus"></i>
+				신규 등록
+			</a>
+		</div>
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>번호</th>
+					<th>이름</th>
+					<th>생일</th>
+					<th>등록일</th>
+					<th>자세히</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="tmp : ${clients}">
+					<td>[[${tmp.num}]]</td>
+					<td>[[${tmp.userName}]]</td>
+					<td>[[${tmp.birthday}]]</td>
+					<td th:text="${tmp.createdAt}"></td>
+					<td>
+						<a th:href="@{|/clients/${tmp.num}|}">보기</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
+
+
