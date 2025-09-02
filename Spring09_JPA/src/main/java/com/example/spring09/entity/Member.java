@@ -28,24 +28,6 @@ public class Member {
 	private String name;
 	private String addr;
 	
-	//dto 를 Entity 로 변경하는 메소드
-	public static Member toEntity(MemberDto dto) {
-		
-		/*
-		 *	Member entity 의 num 이라는 필드에 값이 null 이어야지 
-		 *  
-		 *  .save() 할때 새로운 row 가 추가된다. 
-		 *  
-		 *  따라서 dto 에 num 이 만일 0 이면 0 을 넣는것이 아니고 null 을 넣어주어야 .save() 가 우리가 
-		 *  의도하는 바 대로 동작한다
-		 */
-		
-		return Member.builder()
-				.num(dto.getNum() == 0 ? null : dto.getNum())
-				.name(dto.getName())
-				.addr(dto.getAddr())
-				.build();
-	}
 }
 
 

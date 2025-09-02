@@ -97,7 +97,7 @@ public class MemberServiceImpl implements MemberService{
 		 *  - Entity 의 id 필드에 해당하는 정보가 DB 에 없으면 insert 된다
 		 *  - Entity 의 id 필드에 해당하는 정보가 DB 에 이미 존재하면 update 된다. 
 		 */
-		memberRepo.save(Member.toEntity(dto));
+		memberRepo.save(dto.toEntity());
 	}
 	/*
 	 *  Entity 를 수정해서 DB 에 반영되게 하려면 @Transactional 은 필수 
