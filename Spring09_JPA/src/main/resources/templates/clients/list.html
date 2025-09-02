@@ -29,7 +29,17 @@
 					<td>[[${tmp.num}]]</td>
 					<td>[[${tmp.userName}]]</td>
 					<td>[[${tmp.birthday}]]</td>
-					<td th:text="${tmp.createdAt}"></td>
+					<!--/* 
+						#temporals.format() 함수를 이용해서 날짜 format 을 만든다 
+						yyyy : 년
+						MM : 월
+						dd : 일
+						HH : 24시간 표기
+						hh : 12시간 표기
+						mm : 분
+						ss : 초
+					*/-->
+					<td th:text="${#temporals.format(tmp.createdAt, 'yyyy년 MM월 dd일 HH:mm')}"></td>
 					<td>
 						<a th:href="@{|/clients/${tmp.num}|}">보기</a>
 					</td>
