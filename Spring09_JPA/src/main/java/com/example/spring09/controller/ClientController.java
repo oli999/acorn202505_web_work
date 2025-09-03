@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -78,7 +79,7 @@ public class ClientController {
 		
 		@Valid 로 검증을 한 dto 매개변수 선언 바로 뒤에 BindingResult 매개변수를 선언해야 한다. 
 	 */
-	@PostMapping("/clients")
+	@PostMapping("/clients") 
 	public String create(@Valid ClientDto dto, BindingResult br, RedirectAttributes ra) {
 		//폼 입력 내용중에 에러가 있는지(검증조건을 통과하지 못했는지) 여부를 알아내서
 		boolean hasError=br.hasErrors();
@@ -106,7 +107,45 @@ public class ClientController {
 		}
 		//새 고객 정보를 저장한다.
 		Long num = clientService.addClient(dto);
+		// 고객정보를 성공적으로 저장했다는 메세지를 띄우기 위한 RedirectAttribute 
+		ra.addFlashAttribute("message", dto.getUserName()+" 님의 정보를 저장했습니다");
 		//고객 정보 자세히 보기로 리다일렉트 
+		return "redirect:/clients/"+num;
+	}
+	
+	//고객정보 상세보기 요청 처리
+	@GetMapping("/clients/{num}")
+	public String detail(@PathVariable Long num, Model model) {
+		
+		model.addAttribute("clientDto", clientService.getClient(num));
+		
+		return "clients/detail";
+	}
+	
+	@GetMapping("/clients/{num}/edit")
+	public String editForm(@PathVariable Long num, Model model) {
+		//수정 반영할때 RedirectAttribute 정보를 가져 올수도 있다
+		if(!model.containsAttribute("clientDto")) {
+			model.addAttribute("clientDto", clientService.getClient(num));
+		}
+		return "clients/edit";
+	}
+	
+	@PostMapping("/clients/{num}")
+	public String update(@PathVariable Long num, 
+			@Valid ClientDto dto, BindingResult br, RedirectAttributes ra) {
+		//폼 입력 내용중에 에러가 있는지(검증조건을 통과하지 못했는지) 여부를 알아내서
+		boolean hasError=br.hasErrors();
+		//만일 에러가 있다면
+		if(hasError) {
+			ra.addFlashAttribute("clientDto", dto);
+			ra.addFlashAttribute("org.springframework.validation.BindingResult.clientDto", br);
+			//수정폼으로 다시 리다일렉트 
+			return "redirect:/clients/"+num+"/edit";
+		}
+		//수정반영
+		clientService.update(dto);
+		ra.addFlashAttribute("message", dto.getUserName()+" 님의 정보를 수정했습니다");
 		return "redirect:/clients/"+num;
 	}
 }
