@@ -47,6 +47,17 @@ public class EmployServiceImpl implements EmployService{
 		
 		return DeptDto.toDto(deptRepo.findById(deptno).get());
 	}
+	
+	@Transactional(readOnly = true)
+	@Override
+	public List<EmpDto> getEmpListByDeptno(int deptno) {
+		List<EmpDto> empList1=empRepo.findEmps(deptno).stream().map(EmpDto::toDto).toList();
+		List<EmpDto> empList2=empRepo.findEmps2(deptno).stream().map(EmpDto::toDto).toList();
+		List<EmpDto> empList3=empRepo.findByDept_DeptnoOrderByEnameAsc(deptno)
+				.stream().map(EmpDto::toDto).toList();
+		
+		return empList3;
+	}
 
 }
 
