@@ -66,6 +66,12 @@ public class Spring09JpaApplication {
 			em.persist(c2);
 			em.persist(c3);
 			
+			//반복문 이용해서 sample 데이터를 많이 저장하기
+			for(int i=0; i<100; i++) {
+				Member tmp=Member.builder().name("이름"+i).addr("주소"+i).build();
+				em.persist(tmp);
+			}
+			
 			tx.commit(); //commit 하는 시점에 저장 
 		}catch(Exception e) {
 			e.printStackTrace();
