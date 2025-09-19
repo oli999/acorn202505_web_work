@@ -37,6 +37,15 @@ public class UserController {
 	public final AuthenticationManager authManager;
 	public final UserService userService;
 	
+	//회원가입 요청 처리
+	@PostMapping("/user")
+	public ResponseEntity<Void> signup(@RequestBody UserDto dto){
+		
+		userService.createUser(dto);
+		
+		return ResponseEntity.noContent().build();
+	}
+	
 	/*
 	 *  요청 처리후에 특별히 응답할 내용이 없을때  204 응답을 하면 된다.
 	 */

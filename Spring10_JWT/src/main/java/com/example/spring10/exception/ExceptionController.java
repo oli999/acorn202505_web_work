@@ -18,6 +18,12 @@ import io.swagger.v3.oas.annotations.Hidden;
 @RestControllerAdvice
 public class ExceptionController {
 	
+	@ExceptionHandler(UserNameException.class)
+	public ResponseEntity<String> userNameException(UserNameException une){
+		
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(une.getMessage());	
+	}
+	
 	@ExceptionHandler(PasswordException.class)
 	public ResponseEntity<String> passwordException(PasswordException pe){
 		//예외 객체로 부터 메세지 얻어내기 
