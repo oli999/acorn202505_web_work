@@ -37,6 +37,18 @@ public class UserController {
 	public final AuthenticationManager authManager;
 	public final UserService userService;
 	
+	//회원정보 수정 요청 처리
+	// multipart/form-data  요청이기 때문에 @RequestBody 어노테이션을 붙이지 않는다 (파일 업로드 처리)
+	@PatchMapping("/user")
+	public ResponseEntity<Void> update(UserDto dto){
+		// userName 은 전송이 안되기때문에 spring security 로 부터 얻어내기 
+		String userName=SecurityContextHolder.getContext().getAuthentication().getName();
+		dto.setUserName(userName);
+		
+		userService.updateUser(dto);
+		return ResponseEntity.noContent().build();
+	}
+	
 	
 	//회원가입 요청 처리
 	@PostMapping("/user")
