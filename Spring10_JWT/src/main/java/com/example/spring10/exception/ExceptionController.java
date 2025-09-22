@@ -20,7 +20,8 @@ public class ExceptionController {
 	
 	@ExceptionHandler(UserNameException.class)
 	public ResponseEntity<String> userNameException(UserNameException une){
-		
+		// HttpStatus.BAD_REQUEST 는 400 번 응답을 발생시킨다 
+		// 응답의 body 에는 예외 메세지를 담는다 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(une.getMessage());	
 	}
 	

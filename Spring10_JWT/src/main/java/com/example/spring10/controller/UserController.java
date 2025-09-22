@@ -37,12 +37,17 @@ public class UserController {
 	public final AuthenticationManager authManager;
 	public final UserService userService;
 	
+	
 	//회원가입 요청 처리
 	@PostMapping("/user")
 	public ResponseEntity<Void> signup(@RequestBody UserDto dto){
 		
 		userService.createUser(dto);
-		
+		/*
+		 *  ResponseEntity<Void> 는 204 응답이고 응답의 body 에 아무런 내용이 없는 응답이다.
+		 *  
+		 *  해당 응답을 하기위한 code 는 아래와 같다.  .noContent().build() 
+		 */
 		return ResponseEntity.noContent().build();
 	}
 	

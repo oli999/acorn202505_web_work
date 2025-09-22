@@ -38,7 +38,10 @@ public class UserServiceImpl implements UserService{
 	public void createUser(UserDto dto) {
 		//사용자가 입력한 userName 으로 select 되는 값이 있는지 읽어와 본다.
 		UserDto result=dao.getByUserName(dto.getUserName());
+		//이미 가입된 정보가 있으면
 		if(result != null) {
+			// custom 예외를 발생시킨다 => ExceptionController 의 UserNameException type 을 처리하는 
+			// 메소드로 실행의 흐름이 넘어간다 
 			throw new UserNameException("이미 사용중인 아이디 입니다");
 		}
 		//날것의 비밀번호를 암호화 해서 
