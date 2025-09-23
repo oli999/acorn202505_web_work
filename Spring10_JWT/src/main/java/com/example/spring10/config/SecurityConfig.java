@@ -44,7 +44,7 @@ public class SecurityConfig {
 				.requestMatchers("/admin/**").hasRole("ADMIN") 
 				.requestMatchers("/staff/**").hasAnyRole("ADMIN", "STAFF")
 				.requestMatchers(HttpMethod.POST, "/v1/user","/v1/login").permitAll() //api 회원가입, 로그인 요청은 받아들이도록
-				.requestMatchers(HttpMethod.GET, "/v1/board").permitAll()
+				.requestMatchers(HttpMethod.GET, "/v1/board", "/v1/board/**").permitAll()
 				.anyRequest().authenticated()
 		)
 		.sessionManagement(config ->

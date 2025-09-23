@@ -60,7 +60,7 @@
 	<select id="getByNum" parameterType="int" resultType="boardDto">
 		SELECT *
 		FROM	
-			(SELECT b.num, writer, title, content, viewCount, createdAt, 
+			(SELECT b.num, writer, title, content, viewCount, b.createdAt, 
 				profileImage,
 				LAG(b.num, 1, 0) OVER (ORDER BY b.num DESC) AS prevNum,
 				LEAD(b.num, 1, 0) OVER (ORDER BY b.num DESC) AS nextNum
@@ -72,7 +72,7 @@
 	<select id="getByDto" parameterType="boardDto" resultType="boardDto">
 		SELECT *
 		FROM	
-			(SELECT b.num, writer, title, content, viewCount, createdAt, 
+			(SELECT b.num, writer, title, content, viewCount, b.createdAt, 
 				profileImage,
 				LAG(b.num, 1, 0) OVER (ORDER BY b.num DESC) AS prevNum,
 				LEAD(b.num, 1, 0) OVER (ORDER BY b.num DESC) AS nextNum
