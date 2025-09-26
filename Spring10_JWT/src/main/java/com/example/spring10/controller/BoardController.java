@@ -2,6 +2,7 @@ package com.example.spring10.controller;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,14 @@ public class BoardController {
 	//의존 객체 생성자 주입 받기 
 	private final BoardService boardService;
 	private final CommentService commentService;
+	
+	//댓글 추가 요청 처리 
+	@PostMapping("/comments")
+	public ResponseEntity<Void> saveComment(@RequestBody CommentDto dto) {
+		commentService.createComment(dto);
+		//204 빈 컨텐츠 응답 
+		return ResponseEntity.noContent().build();
+	}
 	
 	//댓글 목록보기 요청 처리
 	@GetMapping("/board/{num}/comments")
