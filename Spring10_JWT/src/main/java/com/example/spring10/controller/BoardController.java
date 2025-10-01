@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +30,23 @@ public class BoardController {
 	//의존 객체 생성자 주입 받기 
 	private final BoardService boardService;
 	private final CommentService commentService;
+	
+	//댓글 수정 요청 처리
+	@PatchMapping("/comments/{num}")
+	public ResponseEntity<Void> updateComment(@PathVariable int num, @RequestBody CommentDto dto){
+		//dto 에 댓글 번호가 있지만 다시 한번 넣어준다. 
+		//요청하는 상황에 따라 dto 에 댓글 번호가 없을수도 있으니...
+		dto.setNum(num);
+		commentService.updateComment(dto);
+		return ResponseEntity.noContent().build();
+	}
+	
+	//댓글 삭제 요청 처리
+	@DeleteMapping("/comments/{num}")
+	public ResponseEntity<Void> deleteComment(@PathVariable int num){
+		commentService.deleteComment(num);
+		return ResponseEntity.noContent().build();
+	}
 	
 	//댓글 추가 요청 처리 
 	@PostMapping("/comments")
