@@ -17,9 +17,9 @@ public class CommentDaoImpl implements CommentDao{
 	
 	//원글의 글번호를 이용해서 원글에 달린 댓글 목록을 리턴하는 메소드 
 	@Override
-	public List<CommentDto> selectList(int parentNum) {
-		
-		return session.selectList("comment.selectList", parentNum);
+	public List<CommentDto> selectList(CommentDto dto) {
+		// 페이징 처리에 맞는 row 만 select 하기 위해 CommentDto 를 파라미터로 전달한다 
+		return session.selectList("comment.selectList", dto);
 	}
 
 	@Override
@@ -48,6 +48,16 @@ public class CommentDaoImpl implements CommentDao{
 	public CommentDto getByNum(int num) {
 		
 		return session.selectOne("comment.getByNum", num);
+	}
+
+	@Override
+	public int getCount(int parentNum) {
+		/*
+		 *  parameterType => int
+		 *  resultType => int
+		 *  sql 의 id => getCount
+		 */
+		return session.selectOne("comment.getCount", parentNum);
 	}
 
 }

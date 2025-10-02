@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.spring10.dto.BoardDto;
 import com.example.spring10.dto.BoardListResponse;
 import com.example.spring10.dto.CommentDto;
+import com.example.spring10.dto.CommentListResponse;
 import com.example.spring10.service.BoardService;
 import com.example.spring10.service.CommentService;
 
@@ -57,10 +58,11 @@ public class BoardController {
 	}
 	
 	//댓글 목록보기 요청 처리
+	// "/board/x/comments?pageNum=x"  이런 구조로 요청할 예정
 	@GetMapping("/board/{num}/comments")
-	public List<CommentDto> commentList(@PathVariable int num){
-		
-		return commentService.getComments(num);
+	public CommentListResponse commentList(@PathVariable int num, @RequestParam(defaultValue = "1") int pageNum){
+		System.out.println(pageNum);
+		return commentService.getComments(num, pageNum);
 	}
 	
 	//게시글 상세보기 요청처리
