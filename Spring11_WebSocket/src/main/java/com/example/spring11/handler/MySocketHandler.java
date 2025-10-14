@@ -2,6 +2,7 @@ package com.example.spring11.handler;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.web.socket.CloseStatus;
@@ -11,8 +12,11 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 // TextWebSocketHandler 클래스를 상속 받는다 
 public class MySocketHandler extends TextWebSocketHandler{
-	//WebSocketSession 을 누적 시킬 객체 
-	List<WebSocketSession> sessionList=new ArrayList<>();
+	//WebSocketSession 을 누적 시킬 객체 (멀티 thread 에 안전하지 않은 ArrayList 객체)
+	//List<WebSocketSession> sessionList=new ArrayList<>();
+	
+	//Thread Safe 한 동기화된 리스트 객체 사용하기
+	List<WebSocketSession> sessionList=Collections.synchronizedList(new ArrayList<>());
 	
 	//클라이언트가 웹소켓 연결을 요청하고 성공 되었을때 호출되는 메소드 
 	@Override
